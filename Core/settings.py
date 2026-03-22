@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os 
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -78,7 +79,13 @@ WSGI_APPLICATION = 'Core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
+
+# Fetch the URL from Render, but provide a local fallback (like SQLite) 
+# so the build doesn't crash if the variable is missing.
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', 
         'NAME': os.getenv('DB_NAME'),
@@ -88,15 +95,17 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
+else:
+    # Local fallback for development
+    
 
 
-
-#DATABASES = {
-    #'default': {
-       # 'ENGINE': 'django.db.backends.sqlite3',
-       # 'NAME': BASE_DIR / 'db.sqlite3',
-   # }
-#}
+ DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation
