@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os 
 from dotenv import load_dotenv
-import dj_database_url
+
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-development-key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://amalekites.onrender.com', '127.0.0.1:8000'] 
+ALLOWED_HOSTS = ["*"] 
 
 
 # Application definition
@@ -82,10 +82,23 @@ WSGI_APPLICATION = 'Core.wsgi.application'
 
 # Fetch the URL from Render, but provide a local fallback (like SQLite) 
 # so the build doesn't crash if the variable is missing.
-DATABASE_URL = os.environ.get('DATABASE_URL')
 
-if DATABASE_URL:
-    DATABASES = {
+
+DB_LIVE=os.getenv("DB_LIVE")
+
+if DB_LIVE in["False",False]:
+ DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+else :
+ 
+ 
+ 
+
+ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', 
         'NAME': os.getenv('DB_NAME'),
@@ -95,17 +108,7 @@ if DATABASE_URL:
         'PORT': os.getenv('DB_PORT'),
     }
 }
-else:
-    # Local fallback for development
-    
 
-
- DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -157,9 +160,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-import dj_database_url
-DATABASES['default'] = dj_database_url.config(
-    default=os.environ.get('DATABASE_URL'),
-    conn_max_age=600
-)
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 
