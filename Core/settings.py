@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"] 
-CSRF_TRUSTED_ORIGINS=["myportfolio-production-75d1.up.railway.app"]
+CSRF_TRUSTED_ORIGINS=["https://myportfolio-production-75d1.up.railway.app"]
 
 
 # Application definition
