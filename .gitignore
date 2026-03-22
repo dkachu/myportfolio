@@ -1,0 +1,34 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# --- Django ---
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+staticfiles/
+static_cdn/
+
+# --- Media (User Uploads) ---
+# We ignore these because you don't want your personal 
+# test uploads/CVs saved in your code history.
+media/
+
+# --- Virtual Environments ---
+venv/
+env/
+ENV/
+.env
+
+# --- Editor/OS Settings ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Security ---
+# If you use an environment file for your SECRET_KEY
+.env
+

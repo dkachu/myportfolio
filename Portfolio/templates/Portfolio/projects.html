@@ -1,0 +1,59 @@
+{% extends 'Portfolio/base.html' %} 
+{% block content %}
+<div class="container py-5">
+  <h1 class="text-center mb-5 fw-bold">My Projects</h1>
+
+  <div class="row g-4">
+    {% for project in projects %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm">
+        {% if project.image %}
+        <img
+          src="{{ project.image.url }}"
+          class="card-img-top"
+          alt="{{ project.title }}"
+          style="height: 200px; object-fit: cover"
+        />
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{ project.title }}</h5>
+          <p class="badge bg-secondary mb-2">{{ project.technology }}</p>
+          <p class="card-text text-muted small">
+            {{ project.description|truncatewords:20 }}
+          </p>
+          <a
+            href="{% url 'project_detail' project.slug %}"
+            class="btn btn-sm btn-link text-decoration-none p-0 text-start fw-bold mb-3"
+          >
+            Read Full Story <i class="fas fa-arrow-right small ms-1"></i>
+          </a>
+        </div>
+        <div class="card-footer bg-transparent border-0 pb-3">
+          <div class="d-flex justify-content-between">
+            {% if project.github_link %}
+            <a
+              href="{{ project.github_link }}"
+              class="btn btn-sm btn-outline-dark"
+              target="_blank"
+              ><i class="fab fa-github"></i> Code</a
+            >
+            {% endif %} {% if project.live_link %}
+            <a
+              href="{{ project.live_link }}"
+              class="btn btn-sm btn-primary"
+              target="_blank"
+              >Live Demo</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <p class="text-muted">No projects added yet. Works are in Progress</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'Portfolio/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-primary">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'projects' %}" class="text-decoration-none text-primary">Projects</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ project.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <!-- Left Column: Project Image & Detailed Description -->
+        <div class="col-lg-8">
+            {% if project.image %}
+                <img src="{{ project.image.url }}" class="img-fluid rounded-4 shadow-lg mb-4 w-100" alt="{{ project.title }}" style="max-height: 500px; object-fit: cover;">
+            {% endif %}
+            
+            <div class="project-content bg-white p-4 rounded-4 shadow-sm border">
+                <h2 class="fw-bold mb-4">About the Project</h2>
+                <div class="text-secondary fs-5" style="line-height: 1.8;">
+                    {{ project.description|linebreaks }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Project Sidebar -->
+        <div class="col-lg-4">
+            <div class="sticky-top" style="top: 2rem;">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="card-header bg-dark text-white p-4 border-0 text-center">
+                        <h1 class="h3 fw-bold mb-1">{{ project.title }}</h1>
+                        <span class="badge bg-primary rounded-pill px-3 py-2">{{ project.technology }}</span>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3 text-uppercase small text-muted letter-spacing-1">Links & Resources</h5>
+                        
+                        <div class="d-grid gap-3">
+                            {% if project.live_link %}
+                                <a href="{{ project.live_link }}" target="_blank" class="btn btn-success btn-lg shadow-sm">
+                                    <i class="fas fa-external-link-alt me-2"></i> Visit Live Demo
+                                </a>
+                            {% endif %}
+                            
+                            {% if project.github_link %}
+                                <a href="{{ project.github_link }}" target="_blank" class="btn btn-outline-dark btn-lg shadow-sm">
+                                    <i class="fab fa-github me-2"></i> View Source Code
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="text-muted small">
+                            <p class="mb-1"><i class="far fa-calendar-alt me-2"></i> Published: {{ project.created_at|date:"F Y" }}</p>
+                            <p class="mb-0"><i class="fas fa-folder-open me-2"></i> Category: Web Development</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back to Projects Button -->
+                <div class="mt-4 text-center">
+                    <a href="{% url 'projects' %}" class="btn btn-link text-decoration-none text-secondary">
+                        <i class="fas fa-arrow-left me-2"></i> Back to all projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

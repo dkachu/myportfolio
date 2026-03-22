@@ -1,0 +1,81 @@
+{% extends 'Portfolio/base.html' %} {% block content %}
+<div class="row mt-5">
+  <!-- Profile Sidebar -->
+  <div class="col-md-4 text-center mb-4">
+    <div class="card border-0 shadow-sm p-4">
+      {% if profile.profile_pic %}
+      <img
+        src="{{ profile.profile_pic.url }}"
+        class="img-fluid rounded-circle shadow mb-3"
+        alt="Profile"
+        style="width: 200px; height: 200px; object-fit: cover"
+      />
+      {% endif %}
+      <h3 class="fw-bold">{{ profile.full_name }}</h3>
+      <p class="text-muted">{{ profile.headline }}</p>
+
+      <div class="d-grid gap-2">
+        {% if profile.cv_file %}
+        <a
+          href="{{ profile.cv_file.url }}"
+          class="btn btn-primary btn-sm"
+          download
+          >Download Resume</a
+        >
+        {% endif %}
+        <a
+          href="{{ profile.linkedin_url }}"
+          class="btn btn-outline-dark btn-sm"
+          target="_blank"
+          >LinkedIn</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Bio & Contact Form -->
+  <div class="col-md-8">
+    <!-- Bio Card -->
+    <div class="card border-0 shadow-sm p-4 mb-4">
+      <h2 class="h4 border-bottom pb-2 mb-3">Professional Bio</h2>
+      <p class="text-secondary">{{ profile.bio|linebreaks }}</p>
+
+      <h4 class="h6 mt-4 fw-bold">Skills</h4>
+      <div class="d-flex flex-wrap gap-2">
+        {% for skill in profile.get_skills_list %}
+        <span class="badge bg-dark text-white rounded-pill px-3"
+          >{{ skill }}</span
+        >
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Contact Me Card -->
+    <div class="card border-0 shadow-sm p-4">
+      <h2 class="h4 border-bottom pb-2 mb-3">Get in Touch</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Name</label>
+            {{ form.name }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Email</label>
+            {{ form.email }}
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-bold">Message</label>
+            {{ form.message }}
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-dark w-100">
+              Send Message
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
