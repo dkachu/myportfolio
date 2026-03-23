@@ -13,25 +13,30 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os 
 from dotenv import load_dotenv
-import dj_database_url
+import environ
+
 
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env =environ.Env(DEBUG=(bool,False))
+environ.Env.read_env(os.path.join(BASE_DIR,'.env'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.getenv("DEBUG") 
 
-ALLOWED_HOSTS = ["*"] 
-CSRF_TRUSTED_ORIGINS=["https://myportfolio-production-75d1.up.railway.app"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+CSRF_TRUSTED_ORIGINS = [
+    "https://portfolio-lively-shadow-2470.fly.dev",
+]
 
 
 # Application definition
@@ -86,30 +91,34 @@ WSGI_APPLICATION = 'Core.wsgi.application'
 # so the build doesn't crash if the variable is missing.
 
 
-DB_LIVE=os.environ.get("DB_LIVE")
+#DB_LIVE=os.environ.get("DB_LIVE")
 
-if DB_LIVE in["False",False]:
- DATABASES = {
+#if DB_LIVE in["False",False]:
+DATABASE_PATH = os.getenv("DATABASE_PATH", BASE_DIR / "db.sqlite3")
+if isinstance(DATABASE_PATH, str):
+    DATABASE_PATH = Path(DATABASE_PATH)
+
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': DATABASE_PATH,
     }
 }
-else :
- 
- 
+#else :
  
 
- DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': os.os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-    }
-}
+ 
+
+ #DATABASES = {
+    #'default': {
+       # 'ENGINE': 'django.db.backends.postgresql', 
+       # 'NAME': os.os.environ.get('DB_NAME'),
+      #  'USER': os.environ.get('DB_USER'),
+      #  'PASSWORD': os.environ.get('DB_PASSWORD'),
+       # 'HOST': os.environ.get('DB_HOST'),
+        #'PORT': os.environ.get('DB_PORT'),
+   # }
+#}
 
 
 
@@ -165,7 +174,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
-}
+
 
